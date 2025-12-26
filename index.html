@@ -109,6 +109,7 @@
             position: absolute;
             width: 300px;
             height: 300px;
+            /* Multiply blend mode for light backgrounds */
             background: radial-gradient(circle, rgba(255, 115, 0, 0.15) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%;
             transform: translate(-50%, -50%);
@@ -155,21 +156,10 @@
             color: #000;
             font-weight: 500;
         }
-
-        /* SPLIT BACKGROUND UTILITY 
-           Creates a lighter background for the right column without boxes.
-           Left 41.66% = 5/12 columns (#FAFAFA)
-           Right 58.33% = 7/12 columns (#FFFFFF)
-        */
-        @media (min-width: 1024px) {
-            .split-bg-section {
-                background: linear-gradient(90deg, #FAFAFA 0%, #FAFAFA 41.666667%, #FFFFFF 41.666667%, #FFFFFF 100%);
-            }
-        }
-        @media (max-width: 1023px) {
-            .split-bg-section {
-                background: #FAFAFA;
-            }
+        
+        /* Smooth Scroll Behavior adjustment for anchors */
+        html {
+            scroll-padding-top: 120px; /* Accounts for fixed header */
         }
     </style>
 </head>
@@ -233,10 +223,10 @@
         </div>
     </main>
 
-    <section id="thesis" class="py-32 px-6 relative z-10 section-blur scroll-mt-0 split-bg-section">
+    <section id="thesis" class="py-32 px-6 relative z-10 section-blur scroll-mt-24">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-12 lg:gap-24">
             
-            <div class="w-full lg:w-5/12 lg:sticky lg:top-24 self-start reveal h-fit">
+            <div class="w-full lg:w-5/12 lg:sticky lg:top-32 self-start reveal">
                 <span class="font-mono text-tekne-accent text-xs tracking-widest">OVERVIEW</span>
                 <h2 class="text-4xl md:text-5xl font-light tracking-tight mb-8 mt-4">
                     Track record of delivery. <br>
@@ -263,10 +253,10 @@
                 </div>
             </div>
 
-            <div class="w-full lg:w-7/12 flex flex-col gap-24 pb-24">
+            <div class="w-full lg:w-7/12 flex flex-col gap-16">
                 
-                <div id="content-interviews" class="scroll-target scroll-mt-32">
-                    <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-8">FEATURED INTERVIEWS</span>
+                <div id="content-interviews" class="scroll-target scroll-mt-[120px]">
+                    <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">FEATURED INTERVIEWS</span>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                         
@@ -344,8 +334,8 @@
                     </div>
                 </div>
 
-                <div id="content-press" class="reveal scroll-target scroll-mt-32">
-                    <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-8">RECENT PRESS</span>
+                <div id="content-press" class="w-full pt-8 reveal scroll-target scroll-mt-[120px]">
+                    <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">RECENT PRESS</span>
                     
                     <div class="space-y-6">
                         <a href="#" class="block group">
@@ -386,8 +376,8 @@
                     </div>
                 </div>
 
-                <div id="content-thoughts" class="reveal scroll-target scroll-mt-32">
-                    <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-8">OUR THOUGHTS</span>
+                <div id="content-thoughts" class="scroll-target scroll-mt-[120px]">
+                    <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">OUR THOUGHTS</span>
 
                     <div class="space-y-6 text-tekne-secondary font-light text-sm leading-relaxed opacity-80">
                          <p>
@@ -405,22 +395,25 @@
 
     <section id="strategy" class="py-24 px-6 z-10 section-blur scroll-mt-24">
         <div class="max-w-7xl mx-auto">
-            <div class="mb-16 reveal">
+            <div class="mb-4 reveal">
                 <span class="font-mono text-tekne-accent text-xs tracking-widest">APPROACH</span>
-                <h2 class="text-4xl md:text-5xl font-light tracking-tight mb-8 mt-4">Core Focus & Mandate</h2>
+                <h2 class="text-4xl md:text-5xl font-light tracking-tight mt-4">Core Focus & Mandate</h2>
+            </div>
+            
+            <div class="sticky top-24 z-30 py-8 mb-8 backdrop-blur-md bg-tekne-bg/90 -mx-6 px-6 md:mx-0 md:px-0 transition-all duration-300">
+                <p class="text-tekne-secondary font-light leading-relaxed text-lg max-w-2xl">
+                    By leveraging our global network and deep industry expertise, we identify high-conviction opportunities where the market underestimates the magnitude of future growth, allowing us to capture asymmetric returns over the long term.
+                </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-auto gap-4 h-auto md:h-[600px]">
+            <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-auto gap-4 relative z-0">
                 
-                <div class="reveal glass md:col-span-2 md:row-span-2 rounded-xl flex flex-col justify-end group overflow-hidden relative glow-card" id="symbiosis-container">
-                    
+                <div class="reveal glass md:col-span-2 md:row-span-2 rounded-xl flex flex-col justify-end group overflow-hidden relative glow-card h-[400px]" id="symbiosis-container">
                     <div class="absolute inset-0 z-0 opacity-100 pointer-events-auto overflow-hidden">
                          <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#FAFAFA] z-10 pointer-events-none"></div>
                         <canvas id="symbiosisCanvas" class="w-full h-full"></canvas>
                     </div>
-
                     <div class="glow-effect"></div>
-                    
                     <div class="relative z-20 px-8 pb-8 pointer-events-none"> 
                         <i data-lucide="layers" class="w-8 h-8 text-black mb-6"></i>
                         <h3 class="text-2xl font-light text-black">Our Fund</h3>
@@ -430,57 +423,77 @@
                     </div>
                 </div>
 
-                <div class="reveal glass md:col-span-1 md:row-span-2 rounded-xl flex flex-col items-center justify-center text-center group overflow-hidden relative glow-card">
+                <div class="reveal glass md:col-span-1 md:row-span-2 rounded-xl flex flex-col items-center justify-center text-center group overflow-hidden relative glow-card h-[400px]">
                     <div class="glow-effect"></div>
-
                     <div class="absolute inset-x-0 top-0 h-[70%] w-full pointer-events-none map-mask z-0">
-                        <div class="relative w-full h-full">
-                            <img src="image_548a46.png" class="absolute left-[0%] top-[20%] flex items-center justify-center opacity-30 filter invert" alt="World Map Pattern">
-                            <div class="absolute left-[28%] top-[33%] flex items-center justify-center">
-                                <div class="w-1 h-1 bg-tekne-accent rounded-full z-10 box-shadow-[0_0_8px_#FF7300]"></div>
-                                <div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar"></div>
-                            </div>
-                            <div class="absolute left-[48%] top-[26%] flex items-center justify-center">
-                                <div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div>
-                                <div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 0.2s"></div>
-                            </div>
-                            <div class="absolute left-[56%] top-[32%] flex items-center justify-center"><div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 0.5s"></div></div>
-                            <div class="absolute left-[67%] top-[25%] flex items-center justify-center"><div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 0.7s"></div></div>
-                            <div class="absolute left-[70%] top-[42%] flex items-center justify-center"><div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 1.0s"></div></div>
-                            <div class="absolute left-[80%] top-[60%] flex items-center justify-center"><div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 1.2s"></div></div>
-                            <div class="absolute left-[83%] top-[43%] flex items-center justify-center"><div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 1.4s"></div></div>
+                        <div class="relative w-full h-full opacity-30">
+                            <div class="absolute left-[50%] top-[30%] w-1 h-1 bg-tekne-accent rounded-full"><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar"></div></div>
+                             <div class="absolute left-[30%] top-[60%] w-1 h-1 bg-tekne-accent rounded-full"><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 1s"></div></div>
                         </div>
                     </div>
-
-                    <div class="mt-auto relative z-10 flex flex-col items-center pb-8">
+                    <div class="mt-auto relative z-10 flex flex-col items-center pb-8 px-4">
                         <div class="w-16 h-16 rounded-full border border-black/10 flex items-center justify-center mb-6 animate-float bg-white/40 backdrop-blur-sm">
                             <i data-lucide="globe" class="w-6 h-6 text-tekne-accent"></i>
                         </div>
                         <h3 class="text-xl font-light text-black">Global Team</h3>
-                        <p class="mt-2 text-xs text-tekne-secondary font-mono tracking-widest group-hover:text-tekne-accent transition-colors">Americas / EMEA / APAC</p>
-                        <div class="w-full max-w-[200px] h-[1px] bg-black/10 my-6"></div>
-                        <p class="text-tekne-secondary text-sm max-w-[240px]">We believe superior returns require local presence. Our team lives and works in the markets we invest in, ensuring our research is timely, culturally nuanced, and first-hand.</p>
+                        <div class="w-full max-w-[100px] h-[1px] bg-black/10 my-4"></div>
+                        <p class="text-tekne-secondary text-xs max-w-[200px]">Americas / EMEA / APAC presence ensuring timely research.</p>
                     </div>
                 </div>
 
-                <div class="reveal glass rounded-xl flex flex-col justify-end group overflow-hidden relative glow-card h-full min-h-[260px]">
+                <div class="reveal glass rounded-xl flex flex-col justify-end group overflow-hidden relative glow-card h-[260px]">
                     <div class="glow-effect"></div>
-                    
-                    <div class="absolute inset-0 z-0">
-                        <img src="beeneet1.png" alt="Beeneet Kothari" class="w-full h-full object-cover object-top opacity-80 grayscale group-hover:grayscale-0 transition-all duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 z-0 bg-black/5">
+                         <div class="w-full h-full bg-gradient-to-t from-black/60 to-transparent"></div>
                     </div>
-
                     <div class="relative z-10 p-6">
-                        <h3 class="text-lg font-medium text-white">Beeneet Kothari</h3>
-                        <p class="text-white/80 text-xs mt-1 font-mono tracking-wider group-hover:text-tekne-accent transition-colors">Managing Director</p>
+                        <h3 class="text-lg font-medium text-black">Beeneet Kothari</h3>
+                        <p class="text-black/60 text-xs mt-1 font-mono tracking-wider">Managing Director</p>
                     </div>
                 </div>
                 
-                <div class="reveal glass p-6 rounded-xl flex flex-col justify-center items-center text-left group overflow-hidden relative glow-card">
+                <div class="reveal glass p-6 rounded-xl flex flex-col justify-center items-center text-left group overflow-hidden relative glow-card h-[260px]">
                     <div class="glow-effect"></div>
                     <div class="relative z-10">
-                        <p class="text-tekne-secondary text-sm leading-tight max-w-[240px]">Beeneet Kothari is the Managing Partner and Principal Portfolio Manager of Tekne Capital Management. Prior, he was a Managing Director at PointState Capital and Duquesne Capital, a global macro hedge fund founded by Stan Druckenmiller.</p>
+                        <p class="text-tekne-secondary text-xs leading-relaxed">
+                            Prior, he was a Managing Director at PointState Capital and Duquesne Capital, a global macro hedge fund founded by Stan Druckenmiller.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="reveal glass p-6 rounded-xl flex flex-col justify-between group overflow-hidden relative glow-card h-[260px] md:col-span-1">
+                    <div class="glow-effect"></div>
+                    <i data-lucide="bar-chart-2" class="w-6 h-6 text-tekne-accent mb-4"></i>
+                    <div>
+                        <h3 class="text-lg font-light text-black mb-2">Quantitative Rigor</h3>
+                        <p class="text-tekne-secondary text-xs leading-relaxed">
+                            Data-driven models complement our fundamental research, ensuring risk factors are monitored in real-time.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="reveal glass p-6 rounded-xl flex flex-col justify-between group overflow-hidden relative glow-card h-[260px] md:col-span-2">
+                    <div class="glow-effect"></div>
+                    <div class="flex justify-between items-start">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-tekne-accent"></i>
+                        <span class="font-mono text-[10px] text-tekne-secondary tracking-widest">RISK MGT</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-light text-black mb-2">Capital Preservation</h3>
+                        <p class="text-tekne-secondary text-xs leading-relaxed max-w-lg">
+                            We employ hedging strategies using derivatives and options to protect the portfolio against extreme market volatility while maintaining upside exposure.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="reveal glass p-6 rounded-xl flex flex-col justify-between group overflow-hidden relative glow-card h-[260px] md:col-span-1">
+                    <div class="glow-effect"></div>
+                    <i data-lucide="zap" class="w-6 h-6 text-tekne-accent mb-4"></i>
+                    <div>
+                        <h3 class="text-lg font-light text-black mb-2">Execution Speed</h3>
+                        <p class="text-tekne-secondary text-xs leading-relaxed">
+                            Agile decision making allows us to enter and exit positions efficiently across global exchanges.
+                        </p>
                     </div>
                 </div>
 
@@ -580,26 +593,26 @@
                     initHeroRippleSystem(); // Main Hero Physics
                     initFocusEffect(); 
                     initSymbiosisAnimation();
-                    initThesisNav(); // SIDEBAR NAV FUNCTION
+                    initThesisNav(); // NEW SIDEBAR NAV FUNCTION
                 }, 500);
             }, 1500);
         });
 
-        // --- SIDEBAR NAV LOGIC (Updated for better accuracy) ---
+        // --- NEW: SIDEBAR NAV LOGIC ---
         function initThesisNav() {
             const links = document.querySelectorAll('.sidebar-link');
             const indicator = document.getElementById('sidebar-indicator');
             const targets = document.querySelectorAll('.scroll-target');
             
+            // Set initial position
             if(links.length > 0 && indicator) {
                 indicator.style.top = links[0].offsetTop + 'px';
             }
 
+            // ADJUSTED ROOT MARGIN for better accuracy when clicking vs scrolling
             const observerOptions = {
                 root: null,
-                // Refined rootMargin to trigger when the element is near the top of the viewport
-                // Top -15% accounts for navbar, Bottom -50% ensures we switch when it's clearly active
-                rootMargin: '-15% 0px -50% 0px', 
+                rootMargin: '-15% 0px -60% 0px', 
                 threshold: 0
             };
 
@@ -609,13 +622,12 @@
                         const id = entry.target.getAttribute('id');
                         const activeLink = document.querySelector(`.sidebar-link[data-target="${id}"]`);
                         
-                        // Reset all links
+                        // Update visual styles
                         links.forEach(link => {
                             link.classList.remove('active', 'text-black', 'font-medium');
                             link.classList.add('text-tekne-secondary/50');
                         });
                         
-                        // Activate current
                         if(activeLink) {
                             activeLink.classList.add('active', 'text-black', 'font-medium');
                             activeLink.classList.remove('text-tekne-secondary/50');

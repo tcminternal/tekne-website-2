@@ -109,7 +109,6 @@
             position: absolute;
             width: 300px;
             height: 300px;
-            /* Multiply blend mode for light backgrounds */
             background: radial-gradient(circle, rgba(255, 115, 0, 0.15) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%;
             transform: translate(-50%, -50%);
@@ -396,7 +395,7 @@
     <section id="strategy" class="py-24 px-6 z-10 section-blur scroll-mt-24">
         <div class="max-w-7xl mx-auto">
             
-            <div class="sticky top-20 z-30 pt-6 pb-6 -mx-6 px-6 md:mx-0 md:px-0 bg-tekne-bg/95 backdrop-blur-md transition-all duration-300">
+            <div class="sticky top-0 z-30 pt-28 pb-6 -mx-6 px-6 md:mx-0 md:px-0 bg-tekne-bg transition-all duration-300 shadow-[0_10px_30px_-10px_rgba(250,250,250,1)]">
                 <div class="reveal">
                     <span class="font-mono text-tekne-accent text-xs tracking-widest">APPROACH</span>
                     <h2 class="text-4xl md:text-5xl font-light tracking-tight mt-4 mb-8">Core Focus & Mandate</h2>
@@ -426,9 +425,19 @@
                 <div class="reveal glass md:col-span-1 md:row-span-2 rounded-xl flex flex-col items-center justify-center text-center group overflow-hidden relative glow-card h-[400px]">
                     <div class="glow-effect"></div>
                     <div class="absolute inset-x-0 top-0 h-[70%] w-full pointer-events-none map-mask z-0">
-                        <div class="relative w-full h-full opacity-30">
-                             <div class="absolute left-[50%] top-[30%] w-1 h-1 bg-tekne-accent rounded-full"><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar"></div></div>
-                             <div class="absolute left-[30%] top-[60%] w-1 h-1 bg-tekne-accent rounded-full"><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 1s"></div></div>
+                        <div class="relative w-full h-full">
+                            <img src="image_548a46.png" class="absolute left-[0%] top-[20%] flex items-center justify-center opacity-30 filter invert" alt="World Map Pattern">
+                             <div class="absolute left-[28%] top-[33%] flex items-center justify-center">
+                                <div class="w-1 h-1 bg-tekne-accent rounded-full z-10 box-shadow-[0_0_8px_#FF7300]"></div>
+                                <div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar"></div>
+                            </div>
+                            <div class="absolute left-[48%] top-[26%] flex items-center justify-center">
+                                <div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div>
+                                <div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 0.2s"></div>
+                            </div>
+                            <div class="absolute left-[56%] top-[32%] flex items-center justify-center"><div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 0.5s"></div></div>
+                            <div class="absolute left-[67%] top-[25%] flex items-center justify-center"><div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 0.7s"></div></div>
+                            <div class="absolute left-[70%] top-[42%] flex items-center justify-center"><div class="w-1 h-1 bg-tekne-accent rounded-full z-10"></div><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 1.0s"></div></div>
                         </div>
                     </div>
                     <div class="mt-auto relative z-10 flex flex-col items-center pb-8 px-4">
@@ -443,12 +452,13 @@
 
                 <div class="reveal glass rounded-xl flex flex-col justify-end group overflow-hidden relative glow-card h-[260px]">
                     <div class="glow-effect"></div>
-                    <div class="absolute inset-0 z-0 bg-black/5">
-                         <div class="w-full h-full bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute inset-0 z-0">
+                         <img src="beeneet1.png" alt="Beeneet Kothari" class="w-full h-full object-cover object-top opacity-80 grayscale group-hover:grayscale-0 transition-all duration-700">
+                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     </div>
                     <div class="relative z-10 p-6">
-                        <h3 class="text-lg font-medium text-black">Beeneet Kothari</h3>
-                        <p class="text-black/60 text-xs mt-1 font-mono tracking-wider">Managing Director</p>
+                        <h3 class="text-lg font-medium text-white">Beeneet Kothari</h3>
+                        <p class="text-white/80 text-xs mt-1 font-mono tracking-wider group-hover:text-tekne-accent transition-colors">Managing Director</p>
                     </div>
                 </div>
                 

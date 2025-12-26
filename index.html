@@ -109,6 +109,7 @@
             position: absolute;
             width: 300px;
             height: 300px;
+            /* Multiply blend mode for light backgrounds */
             background: radial-gradient(circle, rgba(255, 115, 0, 0.15) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%;
             transform: translate(-50%, -50%);
@@ -159,28 +160,28 @@
         </div>
     </div>
 
-    <nav class="fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-start relative z-50">
+    <nav class="fixed top-0 left-0 z-50 transition-all duration-300 w-full md:w-auto md:h-screen" id="navbar">
+        <div class="p-6 md:p-10 flex flex-row md:flex-col justify-between md:justify-start items-center md:items-start h-full relative z-50">
             
-            <div class="flex flex-col items-start gap-3">
+            <div class="flex flex-col items-start">
                 <a href="#" class="relative z-50 group block">
                     <img src="tekne.png" alt="Tekne Capital" class="w-28 h-auto object-contain brightness-0">
                 </a>
-                
-                <div class="hidden md:block">
-                    <a href="#contact" class="px-5 py-1.5 border border-black/10 rounded-full text-[10px] font-mono hover:bg-black hover:text-white transition-all duration-300 tracking-wider">
+
+                <div class="hidden md:block mt-8">
+                    <a href="#contact" class="px-6 py-2 border border-black/10 rounded-full text-xs font-mono hover:bg-black hover:text-white transition-all duration-300 whitespace-nowrap">
                         INVESTOR LOGIN
                     </a>
                 </div>
             </div>
 
-            <div class="hidden md:flex space-x-10 text-xs font-mono tracking-widest text-tekne-secondary pt-2">
+            <div class="hidden md:flex flex-col space-y-4 mt-12 text-xs font-mono tracking-widest text-tekne-secondary">
                 <a href="#thesis" class="hover:text-tekne-accent transition-colors">01 / OVERVIEW</a>
                 <a href="#strategy" class="hover:text-tekne-accent transition-colors">02 / APPROACH</a>
                 <a href="#contact" class="hover:text-tekne-accent transition-colors">03 / CONTACT</a>
             </div>
 
-            <button class="md:hidden z-50 text-black pt-1" onclick="toggleMobileMenu()">
+            <button class="md:hidden z-50 text-black" onclick="toggleMobileMenu()">
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
         </div>
@@ -190,7 +191,7 @@
                 <a href="#thesis" onclick="toggleMobileMenu()" class="hover:text-tekne-accent">The Thesis</a>
                 <a href="#strategy" onclick="toggleMobileMenu()" class="hover:text-tekne-accent">Strategy</a>
                 <a href="#contact" onclick="toggleMobileMenu()" class="hover:text-tekne-accent">Contact</a>
-                <a href="#contact" onclick="toggleMobileMenu()" class="text-sm font-mono tracking-widest text-tekne-accent mt-4">INVESTOR LOGIN</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="text-sm font-mono pt-4 text-tekne-secondary">INVESTOR LOGIN</a>
             </div>
         </div>
     </nav>

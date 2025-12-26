@@ -1,587 +1,116 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth bg-[#050505]">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tekne Capital Management</title>
-    <meta name="description" content="Tekne Capital bridges the gap between present value and future utility. Global TMT and Digital Asset Investment.">
+// ============================================
+// MEMORY MODULE (memory.js) - WITH DEBUGGING
+// ============================================
+
+window.processMemoryChat = async function(userText, apiKey, model, history = []) {
+    const appsScriptUrl = localStorage.getItem("symbiosis_apps_script_url");
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    // Format history
+    const historyText = history.map(msg => `${msg.role.toUpperCase()}: ${msg.content}`).join("\n");
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    // 1. SYNTHESIZER STEP
+    const synthPrompt = `
+    CONTEXT:
+    ${historyText}
+    
+    CURRENT INPUT: "${userText}"
+    
+    TASK:
+    1. ENTITIES: Identify people/places. Resolve pronouns (e.g. "He" -> "Brandon").
+    2. TOPICS: Broad categories (Identity, Preference, Location, Relationship).
+    3. FACT: Extract NEW info to save. 
+       - If it's a QUESTION or just CHAT, return null.
+       - If it's a statement/fact, summarize it.
+    
+    Return JSON only: { "entities": "...", "topics": "...", "new_fact": "..." (or null) }
+    `;
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        tekne: {
-                            bg: '#050505',
-                            card: '#0A0A0A',
-                            accent: '#FF7300', // Electric Orange
-                            accentDim: 'rgba(255, 115, 0, 0.3)',
-                            secondary: '#888888',
-                            border: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    },
-                    animation: {
-                        'radar': 'radar 3s ease-out infinite',
-                    },
-                    keyframes: {
-                        radar: {
-                            '0%': { transform: 'scale(1)', opacity: '0.6' },
-                            '100%': { transform: 'scale(2.5)', opacity: '0' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    console.log("🧠 1. Synthesizing Input..."); // DEBUG
 
-    <style>
-        body { -webkit-font-smoothing: antialiased; }
+    let synthData = { entities: "", topics: "", new_fact: null };
+    let retrievedContext = "";
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; }
-
-        /* Global Ripple Background */
-        #global-ripple {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        /* Glassmorphism Utilities */
-        .glass-panel {
-            background: rgba(10, 10, 10, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .video-card-hover {
-            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .video-card-hover:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 115, 0, 0.3);
-            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
-        }
-
-        /* Typography Reveal */
-        .char-reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-        }
-        .char-reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Preloader */
-        #preloader {
-            position: fixed;
-            inset: 0;
-            background: #050505;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease-out;
-        }
-
-        /* Sticky Section Headers */
-        .sticky-header {
-            position: sticky;
-            top: 4rem;
-            height: fit-content;
-        }
-
-        /* Disclaimer Modal */
-        #disclaimer-modal {
-            transition: opacity 0.4s ease, visibility 0.4s;
-        }
-        #disclaimer-modal.hidden-modal {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-    </style>
-</head>
-<body class="bg-tekne-bg text-white selection:bg-tekne-accent selection:text-black overflow-x-hidden">
-
-    <div id="preloader">
-        <div class="flex flex-col items-center">
-            <div class="w-16 h-[1px] bg-tekne-accent/50 animate-pulse mb-4"></div>
-            <div class="font-mono text-xs tracking-[0.3em] text-tekne-secondary">INITIALIZING</div>
-        </div>
-    </div>
-
-    <canvas id="globalRippleCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-40 mix-blend-screen"></canvas>
-
-    <nav class="hidden lg:flex fixed left-0 top-0 h-full w-24 flex-col justify-between items-center py-8 z-50 border-r border-tekne-border bg-tekne-bg/50 backdrop-blur-sm">
-        <a href="#" class="group">
-            <img src="tekne.png" alt="T" class="w-10 opacity-80 group-hover:opacity-100 transition-opacity">
-        </a>
-        
-        <div class="flex flex-col space-y-12 [writing-mode:vertical-lr] rotate-180 items-center">
-            <a href="#contact" class="font-mono text-xs tracking-widest text-tekne-secondary hover:text-tekne-accent transition-colors py-2">CONTACT</a>
-            <a href="#strategy" class="font-mono text-xs tracking-widest text-tekne-secondary hover:text-tekne-accent transition-colors py-2">APPROACH</a>
-            <a href="#thesis" class="font-mono text-xs tracking-widest text-tekne-secondary hover:text-tekne-accent transition-colors py-2">THESIS</a>
-        </div>
-
-        <div class="w-[1px] h-12 bg-white/10"></div>
-    </nav>
-
-    <nav class="lg:hidden fixed top-0 w-full z-50 px-6 py-5 flex justify-between items-center bg-tekne-bg/90 backdrop-blur-md border-b border-white/5">
-        <img src="tekne.png" alt="Tekne" class="w-20">
-        <button onclick="toggleMobileMenu()" class="text-white"><i data-lucide="menu"></i></button>
-    </nav>
-    <div id="mobile-menu" class="fixed inset-0 bg-black z-40 flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden">
-        <a href="#thesis" onclick="toggleMobileMenu()" class="text-2xl font-light mb-8">Thesis</a>
-        <a href="#strategy" onclick="toggleMobileMenu()" class="text-2xl font-light mb-8">Strategy</a>
-        <a href="#contact" onclick="toggleMobileMenu()" class="text-2xl font-light">Contact</a>
-    </div>
-
-    <div class="relative z-10 lg:pl-24 w-full max-w-[1920px] mx-auto">
-
-        <header id="hero" class="min-h-screen flex flex-col justify-center px-6 md:px-20 lg:px-32 relative">
-            <div class="max-w-6xl">
-                <div class="font-mono text-tekne-accent text-xs md:text-sm tracking-[0.2em] mb-8 reveal">
-                    00 / TEKNE CAPITAL
-                </div>
-                <h1 class="text-6xl md:text-8xl lg:text-[9rem] font-medium leading-[0.9] tracking-tighter mix-blend-normal">
-                    <span class="block reveal-text">Future.</span>
-                    <span class="block text-tekne-secondary/80 reveal-text" style="transition-delay: 100ms">Financed.</span>
-                </h1>
-                
-                <div class="mt-12 md:mt-20 max-w-xl border-l border-tekne-accent pl-6 reveal" style="transition-delay: 300ms">
-                    <p class="text-lg md:text-xl text-tekne-secondary font-light leading-relaxed">
-                        Investing in the future of technology across the world. <br>
-                        <span class="text-white">Bridging the gap between present value and future utility.</span>
-                    </p>
-                </div>
-            </div>
-
-            <div class="absolute bottom-10 left-6 md:left-20 lg:left-32 animate-bounce">
-                <i data-lucide="arrow-down" class="text-tekne-secondary w-6 h-6"></i>
-            </div>
-        </header>
-
-        <section id="thesis" class="py-24 md:py-40 px-6 md:px-20 lg:px-32 border-t border-tekne-border">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                
-                <div class="lg:col-span-4">
-                    <div class="sticky-header">
-                        <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-4">// 01 THE THESIS</span>
-                        <h2 class="text-4xl md:text-5xl font-light leading-tight mb-8">
-                            Track record of delivery.
-                        </h2>
-                        <p class="text-tekne-secondary font-light leading-relaxed mb-8">
-                            Tekne Capital is a global technology investment manager based in New York. We manage over USD$1 billion, focusing exclusively on tech-related businesses with a heavy tilt towards non-US markets.
-                        </p>
-                        <a href="#contact" class="inline-flex items-center text-xs font-mono border-b border-tekne-accent pb-1 hover:text-tekne-accent transition-colors">
-                            REQUEST ACCESS <i data-lucide="arrow-right" class="w-3 h-3 ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="glass-panel p-1 rounded-xl video-card-hover group relative aspect-video cursor-pointer reveal">
-                            <div class="relative w-full h-full bg-black overflow-hidden rounded-lg">
-                                <img src="https://img.youtube.com/vi/DXjPbZbgcvY/hqdefault.jpg" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-12 h-12 bg-tekne-accent rounded-full flex items-center justify-center text-black scale-90 group-hover:scale-110 transition-transform">
-                                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-3 px-2 pb-2">
-                                <h3 class="font-mono text-xs uppercase text-white/90 group-hover:text-tekne-accent">Bull Case for Chinese Equities</h3>
-                            </div>
-                            <a href="https://www.youtube.com/watch?v=DXjPbZbgcvY" target="_blank" class="absolute inset-0 z-20"></a>
-                        </div>
-
-                        <div class="glass-panel p-1 rounded-xl video-card-hover group relative aspect-video cursor-pointer reveal" style="transition-delay: 100ms">
-                            <div class="relative w-full h-full bg-black overflow-hidden rounded-lg">
-                                <img src="https://img.youtube.com/vi/2zdv5LvMLR0/hqdefault.jpg" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-12 h-12 bg-tekne-accent rounded-full flex items-center justify-center text-black scale-90 group-hover:scale-110 transition-transform">
-                                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-3 px-2 pb-2">
-                                <h3 class="font-mono text-xs uppercase text-white/90 group-hover:text-tekne-accent">Investing in China Prospects</h3>
-                            </div>
-                            <a href="https://www.youtube.com/watch?v=2zdv5LvMLR0" target="_blank" class="absolute inset-0 z-20"></a>
-                        </div>
-
-                         <div class="glass-panel p-1 rounded-xl video-card-hover group relative aspect-video cursor-pointer reveal">
-                            <div class="relative w-full h-full bg-black overflow-hidden rounded-lg">
-                                <img src="https://img.youtube.com/vi/oQ4wXzFB8zg/hqdefault.jpg" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-12 h-12 bg-tekne-accent rounded-full flex items-center justify-center text-black scale-90 group-hover:scale-110 transition-transform">
-                                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-3 px-2 pb-2">
-                                <h3 class="font-mono text-xs uppercase text-white/90 group-hover:text-tekne-accent">Chinese Tech vs S&P 500</h3>
-                            </div>
-                            <a href="https://www.youtube.com/watch?v=oQ4wXzFB8zg" target="_blank" class="absolute inset-0 z-20"></a>
-                        </div>
-
-                        <div class="glass-panel p-1 rounded-xl video-card-hover group relative aspect-video cursor-pointer reveal" style="transition-delay: 100ms">
-                            <div class="relative w-full h-full bg-black overflow-hidden rounded-lg">
-                                <img src="https://img.youtube.com/vi/k1Snq3uLURw/hqdefault.jpg" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-12 h-12 bg-tekne-accent rounded-full flex items-center justify-center text-black scale-90 group-hover:scale-110 transition-transform">
-                                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-3 px-2 pb-2">
-                                <h3 class="font-mono text-xs uppercase text-white/90 group-hover:text-tekne-accent">Alpha-Rich Companies</h3>
-                            </div>
-                            <a href="https://www.youtube.com/watch?v=k1Snq3uLURw" target="_blank" class="absolute inset-0 z-20"></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="strategy" class="py-24 md:py-40 px-6 md:px-20 lg:px-32 border-t border-tekne-border">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                
-                <div class="lg:col-span-4 z-20 pointer-events-none">
-                    <div class="sticky-header pointer-events-auto">
-                        <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-4">// 02 APPROACH</span>
-                        <h2 class="text-4xl md:text-5xl font-light leading-tight mb-8">
-                            Symbiotic Intelligence.
-                        </h2>
-                        
-                        <div class="space-y-8">
-                            <div class="reveal">
-                                <h4 class="text-white text-sm font-medium mb-2 flex items-center"><i data-lucide="globe" class="w-4 h-4 mr-2 text-tekne-accent"></i> Global Presence</h4>
-                                <p class="text-tekne-secondary text-sm font-light">Americas / EMEA / APAC. Superior returns require local presence and first-hand research.</p>
-                            </div>
-                            <div class="reveal">
-                                <h4 class="text-white text-sm font-medium mb-2 flex items-center"><i data-lucide="layers" class="w-4 h-4 mr-2 text-tekne-accent"></i> Concentrated Portfolio</h4>
-                                <p class="text-tekne-secondary text-sm font-light">Owning a diversified group of leading non-US technology companies where growth remains robust.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-8 min-h-[600px] relative rounded-2xl overflow-hidden border border-white/10 bg-black/50">
-                    <div class="absolute inset-0 z-0">
-                        <canvas id="symbiosisCanvas" class="w-full h-full opacity-80"></canvas>
-                    </div>
-                    
-                    <div class="absolute bottom-6 left-6 right-6 flex flex-col md:flex-row gap-4 z-10">
-                        <div class="flex-1 glass-panel p-4 rounded-lg flex items-center gap-4">
-                            <img src="beeneet1.png" class="w-12 h-12 rounded-full object-cover grayscale">
-                            <div>
-                                <h5 class="text-sm font-medium text-white">Beeneet Kothari</h5>
-                                <p class="text-[10px] font-mono text-tekne-accent">MANAGING DIRECTOR</p>
-                            </div>
-                        </div>
-                        <div class="flex-1 glass-panel p-4 rounded-lg flex flex-col justify-center">
-                            <p class="text-[10px] font-mono text-tekne-secondary uppercase mb-1">Focus</p>
-                            <p class="text-sm text-white">Public Market Valuations & Growth</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="py-24 md:py-40 px-6 md:px-20 lg:px-32 border-t border-tekne-border bg-[#080808]">
-            <div class="max-w-4xl mx-auto text-center mb-16">
-                <span class="font-mono text-tekne-accent text-xs tracking-widest">// 03 CONTACT</span>
-                <h2 class="text-5xl md:text-7xl font-light mt-6 tracking-tight">Let's shape the future.</h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="glass-panel p-10 rounded-2xl flex flex-col justify-between h-64 hover:border-tekne-accent/50 transition-colors">
-                    <i data-lucide="map-pin" class="w-8 h-8 text-tekne-secondary"></i>
-                    <div>
-                        <h3 class="text-xl text-white mb-2">New York</h3>
-                        <p class="text-tekne-secondary font-light">400 Madison Avenue<br>New York, NY 10017</p>
-                    </div>
-                </div>
-
-                <div class="glass-panel p-10 rounded-2xl flex flex-col justify-between h-64 hover:border-tekne-accent/50 transition-colors">
-                    <i data-lucide="mail" class="w-8 h-8 text-tekne-secondary"></i>
-                    <div>
-                        <h3 class="text-xl text-white mb-2">Inquiries</h3>
-                        <div class="space-y-1">
-                            <p class="text-tekne-secondary font-light">212-300-9530</p>
-                            <a href="mailto:info@teknecap.com" class="text-tekne-accent hover:underline block">info@teknecap.com</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer class="py-12 px-6 md:px-20 lg:px-32 border-t border-tekne-border flex flex-col md:flex-row justify-between items-center text-[10px] font-mono uppercase tracking-wider text-tekne-secondary">
-            <div>&copy; 2025 Tekne Capital Management, LLC.</div>
-            <div class="flex gap-8 mt-4 md:mt-0">
-                <button onclick="openDisclaimer()" class="hover:text-white transition-colors">Legal Disclaimer</button>
-                <a href="mailto:info@teknecap.com" class="hover:text-white transition-colors">Contact</a>
-            </div>
-        </footer>
-
-    </div>
-
-    <div id="disclaimer-modal" class="hidden-modal fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-xl" onclick="closeDisclaimer()"></div>
-        <div class="relative z-10 glass-panel max-w-2xl w-full p-10 rounded-2xl border border-tekne-accent/20 shadow-[0_0_100px_rgba(255,115,0,0.1)]">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="text-2xl font-light text-white">Legal Disclaimer</h3>
-                <button onclick="closeDisclaimer()" class="text-tekne-secondary hover:text-white"><i data-lucide="x"></i></button>
-            </div>
-            <div class="space-y-4 text-sm font-light text-tekne-secondary leading-relaxed h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-                <p>The information contained herein is not an offer to sell or a solicitation of an offer to buy any security or to participate in any trading strategy. Any such offer would only be made to qualified investors through a private offering memorandum.</p>
-                <p>Past performance is not indicative of future results. All investments involve risk, including the loss of principal. The views expressed herein represent the opinions of Tekne Capital Management as of the date of publication.</p>
-                <p>This website is intended for informational purposes only and does not constitute investment advice. Tekne Capital Management is an investment adviser registered with the U.S. Securities and Exchange Commission.</p>
-            </div>
-            <div class="mt-8 flex justify-end">
-                <button onclick="closeDisclaimer()" class="px-6 py-2 bg-tekne-accent text-black text-xs font-mono font-medium rounded hover:bg-white transition-colors">ACKNOWLEDGE</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- INITIALIZATION ---
-        lucide.createIcons();
-
-        window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
-            setTimeout(() => {
-                preloader.style.opacity = '0';
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                    initGlobalRipple();
-                    initSymbiosis();
-                    initScrollReveal();
-                }, 500);
-            }, 1000);
+    try {
+        const synthReq = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "Symbiosis" },
+            body: JSON.stringify({ "model": model, "messages": [{ "role": "system", "content": synthPrompt }] })
         });
+        const synthRes = await synthReq.json();
+        let raw = synthRes.choices[0].message.content;
+        const fb = raw.indexOf('{'), lb = raw.lastIndexOf('}');
+        if (fb !== -1 && lb !== -1) raw = raw.substring(fb, lb + 1);
+        synthData = JSON.parse(raw);
 
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            const isOpen = menu.style.opacity === '1';
-            menu.style.opacity = isOpen ? '0' : '1';
-            menu.style.pointerEvents = isOpen ? 'none' : 'auto';
+        // DEBUG: SHOW WHAT THE AI DECIDED
+        console.log("🧠 AI DECISION:", synthData);
+        if (!synthData.new_fact) {
+            console.log("❌ AI decided NOT to save this (Not a fact).");
+        } else {
+            console.log("✅ AI identified a new fact:", synthData.new_fact);
         }
 
-        function openDisclaimer() {
-            document.getElementById('disclaimer-modal').classList.remove('hidden-modal');
-        }
-        function closeDisclaimer() {
-            document.getElementById('disclaimer-modal').classList.add('hidden-modal');
-        }
+    } catch (e) { console.error("Synthesizer failed", e); }
 
-        // --- SCROLL REVEAL LOGIC ---
-        function initScrollReveal() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        // Text staggered reveal
-                        if(entry.target.querySelector('.reveal-text')) {
-                            const texts = entry.target.querySelectorAll('.reveal-text');
-                            texts.forEach((t, i) => {
-                                setTimeout(() => t.classList.add('active'), i * 150);
-                            });
-                        }
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.reveal, #hero').forEach(el => observer.observe(el));
-        }
-
-        // --- GLOBAL RIPPLE SYSTEM (Subtle Background) ---
-        function initGlobalRipple() {
-            const canvas = document.getElementById('globalRippleCanvas');
-            const ctx = canvas.getContext('2d');
-            let width, height;
-            let mouse = { x: -100, y: -100 };
-
-            function resize() {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width;
-                canvas.height = height;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
-            window.addEventListener('mousemove', e => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
+    // 2. RETRIEVAL STEP
+    if (appsScriptUrl && (synthData.entities || synthData.topics)) {
+        console.log("🔍 2. Searching Google Sheet for:", synthData.entities, synthData.topics); // DEBUG
+        try {
+            const keywords = [];
+            if(synthData.entities) keywords.push(...synthData.entities.split(',').map(s=>s.trim()));
+            if(synthData.topics) keywords.push(...synthData.topics.split(',').map(s=>s.trim()));
+            
+            const memReq = await fetch(appsScriptUrl, {
+                method: "POST",
+                body: JSON.stringify({ action: "retrieve", keywords: keywords })
             });
-
-            const particles = [];
-            const particleCount = 60;
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * width;
-                    this.y = Math.random() * height;
-                    this.vx = (Math.random() - 0.5) * 0.5;
-                    this.vy = (Math.random() - 0.5) * 0.5;
-                    this.size = Math.random() * 2;
-                    this.baseAlpha = Math.random() * 0.3 + 0.1;
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    // Mouse interaction
-                    const dx = this.x - mouse.x;
-                    const dy = this.y - mouse.y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if (dist < 200) {
-                        const force = (200 - dist) / 200;
-                        this.x += (dx / dist) * force * 2;
-                        this.y += (dy / dist) * force * 2;
-                    }
-
-                    if (this.x < 0) this.x = width;
-                    if (this.x > width) this.x = 0;
-                    if (this.y < 0) this.y = height;
-                    if (this.y > height) this.y = 0;
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255, 115, 0, ${this.baseAlpha})`;
-                    ctx.fill();
-                }
+            const memRes = await memReq.json();
+            if(memRes.memories && memRes.memories.length > 0) {
+                console.log("📂 Memories Found:", memRes.memories); // DEBUG
+                retrievedContext = "MEMORIES FOUND:\n" + memRes.memories.join("\n");
+            } else {
+                console.log("📂 No relevant memories found."); // DEBUG
             }
+        } catch (e) { console.error("Memory Retrieval failed", e); }
+    }
 
-            for(let i=0; i<particleCount; i++) particles.push(new Particle());
+    // 3. FINAL GENERATION STEP
+    const finalSystemPrompt = `
+    You are Arvin's digital symbiote. 
+    ${retrievedContext}
+    
+    CONVERSATION HISTORY:
+    ${historyText}
+    
+    User: "${userText}"
+    1. Answer briefly (max 2 sentences).
+    2. Provide 8 UPPERCASE, One-word keywords.
+    3. Choose MOOD: [NEUTRAL, AFFECTIONATE, CRYPTIC, WARNING, JOYFUL, CURIOUS, SAD].
+    Return JSON: { "response": "...", "keywords": [...], "mood": "..." }
+    `;
 
-            function animate() {
-                ctx.clearRect(0, 0, width, height);
-                
-                // Draw connecting lines
-                ctx.lineWidth = 0.5;
-                for(let i=0; i<particleCount; i++) {
-                    particles[i].update();
-                    particles[i].draw();
-                    
-                    for(let j=i; j<particleCount; j++) {
-                        const dx = particles[i].x - particles[j].x;
-                        const dy = particles[i].y - particles[j].y;
-                        const dist = Math.sqrt(dx*dx + dy*dy);
-                        if (dist < 150) {
-                            ctx.beginPath();
-                            ctx.strokeStyle = `rgba(255, 115, 0, ${0.15 * (1 - dist/150)})`;
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-                requestAnimationFrame(animate);
-            }
-            animate();
-        }
+    const finalReq = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json", "HTTP-Referer": window.location.href, "X-Title": "Symbiosis" },
+        body: JSON.stringify({ "model": model, "messages": [{ "role": "user", "content": finalSystemPrompt }] })
+    });
+    
+    // 4. STORAGE STEP (Async)
+    if (appsScriptUrl && synthData.new_fact) {
+        console.log("💾 4. Saving to Sheet..."); // DEBUG
+        fetch(appsScriptUrl, {
+            method: "POST",
+            mode: 'no-cors', 
+            body: JSON.stringify({ 
+                action: "store", 
+                entities: synthData.entities, 
+                topics: synthData.topics, 
+                fact: synthData.new_fact 
+            })
+        })
+        .then(() => console.log("✅ Save Request Sent."))
+        .catch(e => console.error("❌ Save failed", e));
+    }
 
-        // --- SYMBIOSIS 3D CANVAS (Retained Logic) ---
-        function initSymbiosis() {
-            const canvas = document.getElementById('symbiosisCanvas');
-            const ctx = canvas.getContext('2d');
-            let width, height;
-
-            function resize() {
-                const parent = canvas.parentElement;
-                width = parent.clientWidth;
-                height = parent.clientHeight;
-                canvas.width = width;
-                canvas.height = height;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
-            let time = 0;
-            const points = [];
-            const numPoints = 60;
-
-            for(let i=0; i<numPoints; i++) {
-                points.push({
-                    angle: (i / numPoints) * Math.PI * 2,
-                    r: Math.random() * 100 + 50,
-                    speed: Math.random() * 0.02 + 0.005,
-                    offset: Math.random() * Math.PI * 2
-                });
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, width, height);
-                const cx = width / 2;
-                const cy = height / 2;
-                
-                time += 0.01;
-
-                // Draw central core
-                ctx.beginPath();
-                ctx.arc(cx, cy, 20 + Math.sin(time)*5, 0, Math.PI*2);
-                ctx.fillStyle = 'rgba(255, 115, 0, 0.8)';
-                ctx.fill();
-                ctx.shadowBlur = 30;
-                ctx.shadowColor = '#FF7300';
-
-                // Draw orbiting web
-                ctx.shadowBlur = 0;
-                points.forEach((p, i) => {
-                    const r = p.r + Math.sin(time + p.offset) * 20;
-                    const x = cx + Math.cos(p.angle + time * p.speed) * r;
-                    const y = cy + Math.sin(p.angle + time * p.speed) * r;
-
-                    ctx.beginPath();
-                    ctx.arc(x, y, 2, 0, Math.PI*2);
-                    ctx.fillStyle = 'white';
-                    ctx.fill();
-
-                    // Connections
-                    points.forEach((p2, j) => {
-                        if (Math.abs(i - j) < 5) {
-                             const r2 = p2.r + Math.sin(time + p2.offset) * 20;
-                             const x2 = cx + Math.cos(p2.angle + time * p2.speed) * r2;
-                             const y2 = cy + Math.sin(p2.angle + time * p2.speed) * r2;
-                             
-                             ctx.beginPath();
-                             ctx.strokeStyle = `rgba(255, 255, 255, 0.1)`;
-                             ctx.moveTo(x, y);
-                             ctx.lineTo(x2, y2);
-                             ctx.stroke();
-                        }
-                    });
-                });
-
-                requestAnimationFrame(animate);
-            }
-            animate();
-        }
-    </script>
-</body>
-</html>
+    return await finalReq.json();
+}

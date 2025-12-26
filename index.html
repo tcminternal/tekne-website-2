@@ -24,12 +24,11 @@
                     },
                     colors: {
                         tekne: {
-                            // COLOR PALETTE INVERTED HERE
-                            bg: '#FAFAFA',       // Light background (was #050505)
-                            card: '#FFFFFF',     // White cards (was #0A0A0A)
-                            accent: '#FF7300',   // Orange (Kept same)
+                            bg: '#FAFAFA',       // Light background
+                            card: '#FFFFFF',     // White cards
+                            accent: '#FF7300',   // Electric Orange
                             accentDark: '#CC5C00', 
-                            secondary: '#555555' // Dark Grey text (was #888888)
+                            secondary: '#555555' // Dark Grey text for readability
                         }
                     },
                     animation: {
@@ -89,7 +88,7 @@
         .glass {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle dark border */
+            border: 1px solid rgba(0, 0, 0, 0.05);
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
         }
         
@@ -110,8 +109,8 @@
             position: absolute;
             width: 300px;
             height: 300px;
-            /* Multiply blend mode works better on light backgrounds */
-            background: radial-gradient(circle, rgba(255, 115, 0, 0.1) 0%, rgba(255,255,255,0) 70%);
+            /* Multiply blend mode for light backgrounds */
+            background: radial-gradient(circle, rgba(255, 115, 0, 0.15) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
@@ -955,7 +954,7 @@
                     const particleCount = 300; 
                     for(let i=0; i<particleCount; i++) {
                         const angle = (i / particleCount) * Math.PI * 2;
-                        this.particles.push(new DiscRingParticle(angle));
+                        this.particles.push(new RingParticle(angle));
                     }
                 }
 

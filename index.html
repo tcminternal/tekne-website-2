@@ -776,9 +776,9 @@
                 // FIX FOR LIGHT MODE: Use Standard Blending, not lighter
                 ctx.globalCompositeOperation = 'source-over'; 
                 
-                // ADJUSTMENT: Centering the animation in the upper portion
+                // ADJUSTED VERTICAL CENTER (CY)
                 const cx = width / 2;
-                const cy = height * 0.35; // Moved up to 35% height to clear text below
+                const cy = height * 0.35; // Moved up to 35% of height
                 
                 rotationY += 0.002; 
                 rotationX = Math.sin(time * 0.5) * 0.2; time += 0.01;

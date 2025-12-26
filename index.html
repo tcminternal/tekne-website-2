@@ -150,6 +150,12 @@
         #disclaimer-modal.hidden-modal .modal-content {
             transform: scale(0.95) translateY(20px);
         }
+
+        /* Sidebar Navigation Active States */
+        .sidebar-link.active {
+            color: #000;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body class="bg-tekne-bg text-black selection:bg-tekne-accent selection:text-white relative overflow-x-hidden">
@@ -221,91 +227,109 @@
                     Track record of delivery. <br>
                     <span class="text-tekne-secondary">Through multiple economic cycles.</span>
                 </h2>
-                <div class="space-y-6 text-tekne-secondary font-light leading-relaxed text-lg">
+                <div class="space-y-6 text-tekne-secondary font-light leading-relaxed text-lg mb-12">
                     <p>
                         Tekne Capital is a global technology investment manager based in New York with a footprint across the Emerging Markets. We manage over USD$1 billion, and our investment focus is exclusively on tech-related businesses with a heavy tilt towards non-US markets in a concentrated portfolio with multi-year holding periods.
                     </p>
+                </div>
+
+                <div class="hidden lg:flex flex-col relative border-l border-black/10 py-2">
+                    <div id="sidebar-indicator" class="absolute left-[-1.5px] top-2 w-[3px] h-6 bg-tekne-accent rounded-full transition-all duration-300 ease-out"></div>
+                    
+                    <a href="#content-interviews" class="sidebar-link pl-8 py-2 text-[10px] font-mono uppercase tracking-widest text-tekne-secondary/50 hover:text-black transition-colors duration-300" data-target="content-interviews">
+                        Featured Interviews
+                    </a>
+                    <a href="#content-press" class="sidebar-link pl-8 py-2 text-[10px] font-mono uppercase tracking-widest text-tekne-secondary/50 hover:text-black transition-colors duration-300" data-target="content-press">
+                        Recent Press
+                    </a>
+                    <a href="#content-thoughts" class="sidebar-link pl-8 py-2 text-[10px] font-mono uppercase tracking-widest text-tekne-secondary/50 hover:text-black transition-colors duration-300" data-target="content-thoughts">
+                        Our Thoughts
+                    </a>
                 </div>
             </div>
 
             <div class="w-full lg:w-7/12 flex flex-col gap-16">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                <div id="content-interviews" class="scroll-target">
+                    <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">FEATURED INTERVIEWS</span>
                     
-                    <div class="reveal glass rounded-xl group overflow-hidden relative glow-card cursor-pointer flex flex-col aspect-[1/1]">
-                        <div class="glow-effect"></div>
-                        <div class="relative z-10 w-full aspect-video bg-black/10">
-                            <img src="https://img.youtube.com/vi/DXjPbZbgcvY/hqdefault.jpg" alt="Bull Case for Chinese Equities" class="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100 transition-all duration-500">
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-12 h-12 bg-tekne-accent/90 rounded-full flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
-                                    <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                        
+                        <div class="reveal glass rounded-xl group overflow-hidden relative glow-card cursor-pointer flex flex-col aspect-[1/1]">
+                            <div class="glow-effect"></div>
+                            <div class="relative z-10 w-full aspect-video bg-black/10">
+                                <img src="https://img.youtube.com/vi/DXjPbZbgcvY/hqdefault.jpg" alt="Bull Case for Chinese Equities" class="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100 transition-all duration-500">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-12 h-12 bg-tekne-accent/90 rounded-full flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
+                                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="relative z-10 flex-1 flex items-center p-4">
+                                <h3 class="text-black text-[10px] md:text-xs font-mono uppercase tracking-wide leading-tight group-hover:text-tekne-accent transition-colors line-clamp-3">
+                                    Tekne's Kothari shares his bull case for Chinese equities
+                                </h3>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=DXjPbZbgcvY&pp=ygUPYmVlbmVldCBrb3RoYXJp" target="_blank" class="absolute inset-0 z-20"></a>
                         </div>
-                        <div class="relative z-10 flex-1 flex items-center p-4">
-                            <h3 class="text-black text-[10px] md:text-xs font-mono uppercase tracking-wide leading-tight group-hover:text-tekne-accent transition-colors line-clamp-3">
-                                Tekne's Kothari shares his bull case for Chinese equities
-                            </h3>
-                        </div>
-                        <a href="https://www.youtube.com/watch?v=DXjPbZbgcvY&pp=ygUPYmVlbmVldCBrb3RoYXJp" target="_blank" class="absolute inset-0 z-20"></a>
-                    </div>
 
-                    <div class="reveal glass rounded-xl group overflow-hidden relative glow-card cursor-pointer flex flex-col aspect-[1/1]" style="transition-delay: 100ms">
-                        <div class="glow-effect"></div>
-                        <div class="relative z-10 w-full aspect-video bg-black/10">
-                            <img src="https://img.youtube.com/vi/2zdv5LvMLR0/hqdefault.jpg" alt="Prospects for Investing in China" class="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100 transition-all duration-500">
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-12 h-12 bg-tekne-accent/90 rounded-full flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
-                                    <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                        <div class="reveal glass rounded-xl group overflow-hidden relative glow-card cursor-pointer flex flex-col aspect-[1/1]" style="transition-delay: 100ms">
+                            <div class="glow-effect"></div>
+                            <div class="relative z-10 w-full aspect-video bg-black/10">
+                                <img src="https://img.youtube.com/vi/2zdv5LvMLR0/hqdefault.jpg" alt="Prospects for Investing in China" class="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100 transition-all duration-500">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-12 h-12 bg-tekne-accent/90 rounded-full flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
+                                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="relative z-10 flex-1 flex items-center p-4">
+                                <h3 class="text-black text-[10px] md:text-xs font-mono uppercase tracking-wide leading-tight group-hover:text-tekne-accent transition-colors line-clamp-3">
+                                    Prospects for investing in China
+                                </h3>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=2zdv5LvMLR0&t=51s&pp=ygUPYmVlbmVldCBrb3RoYXJp" target="_blank" class="absolute inset-0 z-20"></a>
                         </div>
-                        <div class="relative z-10 flex-1 flex items-center p-4">
-                            <h3 class="text-black text-[10px] md:text-xs font-mono uppercase tracking-wide leading-tight group-hover:text-tekne-accent transition-colors line-clamp-3">
-                                Prospects for investing in China
-                            </h3>
-                        </div>
-                        <a href="https://www.youtube.com/watch?v=2zdv5LvMLR0&t=51s&pp=ygUPYmVlbmVldCBrb3RoYXJp" target="_blank" class="absolute inset-0 z-20"></a>
-                    </div>
 
-                    <div class="reveal glass rounded-xl group overflow-hidden relative glow-card cursor-pointer flex flex-col aspect-[1/1]" style="transition-delay: 200ms">
-                        <div class="glow-effect"></div>
-                        <div class="relative z-10 w-full aspect-video bg-black/10">
-                            <img src="https://img.youtube.com/vi/oQ4wXzFB8zg/hqdefault.jpg" alt="Chinese Tech Stocks Outperform" class="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100 transition-all duration-500">
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-12 h-12 bg-tekne-accent/90 rounded-full flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
-                                    <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                        <div class="reveal glass rounded-xl group overflow-hidden relative glow-card cursor-pointer flex flex-col aspect-[1/1]" style="transition-delay: 200ms">
+                            <div class="glow-effect"></div>
+                            <div class="relative z-10 w-full aspect-video bg-black/10">
+                                <img src="https://img.youtube.com/vi/oQ4wXzFB8zg/hqdefault.jpg" alt="Chinese Tech Stocks Outperform" class="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100 transition-all duration-500">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-12 h-12 bg-tekne-accent/90 rounded-full flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
+                                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="relative z-10 flex-1 flex items-center p-4">
+                                <h3 class="text-black text-[10px] md:text-xs font-mono uppercase tracking-wide leading-tight group-hover:text-tekne-accent transition-colors line-clamp-3">
+                                    Chinese tech stocks could outperform the S&P 500 again
+                                </h3>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=oQ4wXzFB8zg&pp=ygUPYmVlbmVldCBrb3RoYXJp" target="_blank" class="absolute inset-0 z-20"></a>
                         </div>
-                        <div class="relative z-10 flex-1 flex items-center p-4">
-                            <h3 class="text-black text-[10px] md:text-xs font-mono uppercase tracking-wide leading-tight group-hover:text-tekne-accent transition-colors line-clamp-3">
-                                Chinese tech stocks could outperform the S&P 500 again
-                            </h3>
-                        </div>
-                        <a href="https://www.youtube.com/watch?v=oQ4wXzFB8zg&pp=ygUPYmVlbmVldCBrb3RoYXJp" target="_blank" class="absolute inset-0 z-20"></a>
-                    </div>
 
-                    <div class="reveal glass rounded-xl group overflow-hidden relative glow-card cursor-pointer flex flex-col aspect-[1/1]" style="transition-delay: 300ms">
-                        <div class="glow-effect"></div>
-                        <div class="relative z-10 w-full aspect-video bg-black/10">
-                            <img src="https://img.youtube.com/vi/k1Snq3uLURw/hqdefault.jpg" alt="Alpha-rich Companies" class="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100 transition-all duration-500">
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-12 h-12 bg-tekne-accent/90 rounded-full flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
-                                    <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                        <div class="reveal glass rounded-xl group overflow-hidden relative glow-card cursor-pointer flex flex-col aspect-[1/1]" style="transition-delay: 300ms">
+                            <div class="glow-effect"></div>
+                            <div class="relative z-10 w-full aspect-video bg-black/10">
+                                <img src="https://img.youtube.com/vi/k1Snq3uLURw/hqdefault.jpg" alt="Alpha-rich Companies" class="w-full h-full object-cover grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100 transition-all duration-500">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-12 h-12 bg-tekne-accent/90 rounded-full flex items-center justify-center text-white shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
+                                        <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="relative z-10 flex-1 flex items-center p-4">
+                                <h3 class="text-black text-[10px] md:text-xs font-mono uppercase tracking-wide leading-tight group-hover:text-tekne-accent transition-colors line-clamp-3">
+                                    A huge sandbox of Alpha-rich companies
+                                </h3>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=k1Snq3uLURw&pp=ugMICgJpZBABGAHKBQ9iZWVuZWV0IGtvdGhhcmk%3D" target="_blank" class="absolute inset-0 z-20"></a>
                         </div>
-                        <div class="relative z-10 flex-1 flex items-center p-4">
-                            <h3 class="text-black text-[10px] md:text-xs font-mono uppercase tracking-wide leading-tight group-hover:text-tekne-accent transition-colors line-clamp-3">
-                                A huge sandbox of Alpha-rich companies
-                            </h3>
-                        </div>
-                        <a href="https://www.youtube.com/watch?v=k1Snq3uLURw&pp=ugMICgJpZBABGAHKBQ9iZWVuZWV0IGtvdGhhcmk%3D" target="_blank" class="absolute inset-0 z-20"></a>
                     </div>
                 </div>
 
-                <div class="w-full pt-8 reveal">
+                <div id="content-press" class="w-full pt-8 reveal scroll-target">
                     <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">RECENT PRESS</span>
                     
                     <div class="space-y-6">
@@ -345,8 +369,12 @@
                             </div>
                         </a>
                     </div>
+                </div>
 
-                    <div class="mt-12 space-y-6 text-tekne-secondary font-light text-sm leading-relaxed opacity-80">
+                <div id="content-thoughts" class="scroll-target">
+                    <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">OUR THOUGHTS</span>
+
+                    <div class="space-y-6 text-tekne-secondary font-light text-sm leading-relaxed opacity-80">
                          <p>
                             At Tekne, our research process is exhaustive. We believe that true understanding comes from boots-on-the-ground due diligence, not just spreadsheet modeling. Our team frequently travels to key technology hubs—from Shenzhen to Bangalore, from Taipei to Sao Paulo—meeting with suppliers, competitors, and customers to form a holistic view of the competitive landscape.
                         </p>
@@ -536,10 +564,56 @@
                     initScrollAnimations();
                     initHeroRippleSystem(); // Main Hero Physics
                     initFocusEffect(); 
-                    initSymbiosisAnimation(); 
+                    initSymbiosisAnimation();
+                    initThesisNav(); // NEW SIDEBAR NAV FUNCTION
                 }, 500);
             }, 1500);
         });
+
+        // --- NEW: SIDEBAR NAV LOGIC ---
+        function initThesisNav() {
+            const links = document.querySelectorAll('.sidebar-link');
+            const indicator = document.getElementById('sidebar-indicator');
+            const targets = document.querySelectorAll('.scroll-target');
+            
+            // Set initial position
+            if(links.length > 0 && indicator) {
+                indicator.style.top = links[0].offsetTop + 'px';
+            }
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-30% 0px -50% 0px', // Trigger when section is in middle of screen
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        const activeLink = document.querySelector(`.sidebar-link[data-target="${id}"]`);
+                        
+                        // Update visual styles
+                        links.forEach(link => {
+                            link.classList.remove('active', 'text-black', 'font-medium');
+                            link.classList.add('text-tekne-secondary/50');
+                        });
+                        
+                        if(activeLink) {
+                            activeLink.classList.add('active', 'text-black', 'font-medium');
+                            activeLink.classList.remove('text-tekne-secondary/50');
+                            
+                            // Move indicator
+                            indicator.style.top = activeLink.offsetTop + 'px';
+                            indicator.style.height = activeLink.offsetHeight + 'px';
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            targets.forEach(target => observer.observe(target));
+        }
+
 
         // --- 2. NEW PHYSICS-BASED SCATTER RIPPLE SYSTEM (HERO) ---
         function initHeroRippleSystem() {

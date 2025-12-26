@@ -157,9 +157,9 @@
             font-weight: 500;
         }
         
-        /* Smooth Scroll Behavior adjustment for anchors */
+        /* Smooth Scroll Padding for Anchors */
         html {
-            scroll-padding-top: 120px; /* Accounts for fixed header */
+            scroll-padding-top: 140px; 
         }
     </style>
 </head>
@@ -226,7 +226,7 @@
     <section id="thesis" class="py-32 px-6 relative z-10 section-blur scroll-mt-24">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-12 lg:gap-24">
             
-            <div class="w-full lg:w-5/12 lg:sticky lg:top-32 self-start reveal">
+            <div class="w-full lg:w-5/12 lg:sticky lg:top-32 self-start h-fit reveal">
                 <span class="font-mono text-tekne-accent text-xs tracking-widest">OVERVIEW</span>
                 <h2 class="text-4xl md:text-5xl font-light tracking-tight mb-8 mt-4">
                     Track record of delivery. <br>
@@ -255,7 +255,7 @@
 
             <div class="w-full lg:w-7/12 flex flex-col gap-16">
                 
-                <div id="content-interviews" class="scroll-target scroll-mt-[120px]">
+                <div id="content-interviews" class="scroll-target scroll-mt-[130px]">
                     <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">FEATURED INTERVIEWS</span>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
@@ -334,7 +334,7 @@
                     </div>
                 </div>
 
-                <div id="content-press" class="w-full pt-8 reveal scroll-target scroll-mt-[120px]">
+                <div id="content-press" class="w-full pt-8 reveal scroll-target scroll-mt-[130px]">
                     <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">RECENT PRESS</span>
                     
                     <div class="space-y-6">
@@ -376,7 +376,7 @@
                     </div>
                 </div>
 
-                <div id="content-thoughts" class="scroll-target scroll-mt-[120px]">
+                <div id="content-thoughts" class="scroll-target scroll-mt-[130px]">
                     <span class="font-mono text-tekne-accent text-xs tracking-widest block mb-6">OUR THOUGHTS</span>
 
                     <div class="space-y-6 text-tekne-secondary font-light text-sm leading-relaxed opacity-80">
@@ -395,18 +395,18 @@
 
     <section id="strategy" class="py-24 px-6 z-10 section-blur scroll-mt-24">
         <div class="max-w-7xl mx-auto">
-            <div class="mb-4 reveal">
-                <span class="font-mono text-tekne-accent text-xs tracking-widest">APPROACH</span>
-                <h2 class="text-4xl md:text-5xl font-light tracking-tight mt-4">Core Focus & Mandate</h2>
-            </div>
             
-            <div class="sticky top-24 z-30 py-8 mb-8 backdrop-blur-md bg-tekne-bg/90 -mx-6 px-6 md:mx-0 md:px-0 transition-all duration-300">
-                <p class="text-tekne-secondary font-light leading-relaxed text-lg max-w-2xl">
-                    By leveraging our global network and deep industry expertise, we identify high-conviction opportunities where the market underestimates the magnitude of future growth, allowing us to capture asymmetric returns over the long term.
-                </p>
+            <div class="sticky top-20 z-30 pt-6 pb-6 -mx-6 px-6 md:mx-0 md:px-0 bg-tekne-bg/95 backdrop-blur-md transition-all duration-300">
+                <div class="reveal">
+                    <span class="font-mono text-tekne-accent text-xs tracking-widest">APPROACH</span>
+                    <h2 class="text-4xl md:text-5xl font-light tracking-tight mt-4 mb-8">Core Focus & Mandate</h2>
+                    <p class="text-tekne-secondary font-light leading-relaxed text-lg max-w-3xl">
+                        By leveraging our global network and deep industry expertise, we identify high-conviction opportunities where the market underestimates the magnitude of future growth, allowing us to capture asymmetric returns over the long term.
+                    </p>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-auto gap-4 relative z-0">
+            <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-auto gap-4 relative z-0 mt-8">
                 
                 <div class="reveal glass md:col-span-2 md:row-span-2 rounded-xl flex flex-col justify-end group overflow-hidden relative glow-card h-[400px]" id="symbiosis-container">
                     <div class="absolute inset-0 z-0 opacity-100 pointer-events-auto overflow-hidden">
@@ -427,7 +427,7 @@
                     <div class="glow-effect"></div>
                     <div class="absolute inset-x-0 top-0 h-[70%] w-full pointer-events-none map-mask z-0">
                         <div class="relative w-full h-full opacity-30">
-                            <div class="absolute left-[50%] top-[30%] w-1 h-1 bg-tekne-accent rounded-full"><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar"></div></div>
+                             <div class="absolute left-[50%] top-[30%] w-1 h-1 bg-tekne-accent rounded-full"><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar"></div></div>
                              <div class="absolute left-[30%] top-[60%] w-1 h-1 bg-tekne-accent rounded-full"><div class="absolute w-6 h-6 bg-tekne-accent/20 rounded-full animate-radar" style="animation-delay: 1s"></div></div>
                         </div>
                     </div>
@@ -493,6 +493,25 @@
                         <h3 class="text-lg font-light text-black mb-2">Execution Speed</h3>
                         <p class="text-tekne-secondary text-xs leading-relaxed">
                             Agile decision making allows us to enter and exit positions efficiently across global exchanges.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="reveal glass p-6 rounded-xl flex flex-col justify-center items-center text-center group overflow-hidden relative glow-card h-[260px] md:col-span-1">
+                    <div class="glow-effect"></div>
+                    <div class="relative z-10">
+                         <h3 class="text-4xl font-light text-tekne-accent mb-2">15+</h3>
+                        <p class="text-tekne-secondary text-xs leading-relaxed">
+                            Years of Experience in TMT Sectors.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="reveal glass p-6 rounded-xl flex flex-col justify-center items-center text-center group overflow-hidden relative glow-card h-[260px] md:col-span-3">
+                    <div class="glow-effect"></div>
+                    <div class="relative z-10 max-w-lg">
+                        <p class="text-black text-lg font-light italic leading-relaxed">
+                            "Innovation distinguishes between a leader and a follower."
                         </p>
                     </div>
                 </div>
